@@ -58,7 +58,7 @@ $extras = new ArrayObject();
   </ul>
 
   <div class="tab_content" id="account">
-    <table class="table two-column" width="940" border="0" cellspacing="0" cellpadding="2">
+    <table class="table two-column"   border="0" cellspacing="0" cellpadding="2">
       <tbody>
         <tr><td colspan="2"><div>
         <div class="avatar pull-left" style="width: 100px; margin: 10px;">
@@ -213,7 +213,7 @@ if (count($bks) > 1) {
   <!-- ============== DEPARTMENT ACCESS =================== -->
 
   <div class="hidden tab_content" id="access">
-    <table class="table two-column" width="940" border="0" cellspacing="0" cellpadding="2">
+    <table class="table two-column"   border="0" cellspacing="0" cellpadding="2">
       <tbody>
         <tr class="header">
           <th colspan="3">
