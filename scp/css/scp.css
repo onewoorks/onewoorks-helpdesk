@@ -1076,8 +1076,6 @@ a.Icon:hover {
 #content {
     clear:both;
     border:1px solid #aaa;
-    border-top:none;
-    border-bottom:3px solid #bbb;
     padding:10px 10px 20px 10px;
     background:#fff;
 }
