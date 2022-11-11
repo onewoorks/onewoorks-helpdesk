@@ -1464,7 +1464,7 @@ h3.title > .sub-title {
 }
 
 .ticket_info {
-    background:#F4FAFF;
+    /* background:#F4FAFF; */
 }
 
 .ticket_info.custom-data thead th {
