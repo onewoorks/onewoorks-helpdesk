@@ -62,7 +62,7 @@ if ($count) { ?>
 <?php csrf_token(); ?>
  <input type="hidden" name="a" value="mass_process" >
  <input type="hidden" name="do" id="action" value="" >
- <table class="list" border="0" cellspacing="1" cellpadding="2"  >
+  <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="2"  >
     <thead>
         <tr>
             <?php
