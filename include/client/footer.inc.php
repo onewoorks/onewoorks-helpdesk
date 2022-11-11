@@ -22,21 +22,21 @@ if (($lang = Internationalization::getCurrentLanguage()) && $lang != 'en_US') { 
     ?>);
 </script>
 
-<script>
-        (function(d,t) {
-          var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-          g.src="https://app.chaskiq.io/embed.js"
-          s.parentNode.insertBefore(g,s);
-          g.onload=function(){
-            new window.ChaskiqMessengerEncrypted({
-              domain: 'https://app.chaskiq.io',
-              ws:  'wss://app.chaskiq.io/cable',
-              app_id: "gpUbFdnqqihCHPKLjtCKRzjJ",
-              data: "YOUR_ENCRYPTED_JWE_DATA",
-              lang: "USER_LANG_OR_DEFAULTS_TO_BROWSER_LANG" 
-            })
-          }
-        })(document,"script");
-      </script>
+<script type="application/javascript">
+      window.tiledeskSettings= 
+      {
+          projectid: "636dcf724c48ae0014e96f77"
+      };
+      (function(d, s, id) { 
+          var w=window; var d=document; var i=function(){i.c(arguments);};
+          i.q=[]; i.c=function(args){i.q.push(args);}; w.Tiledesk=i;                    
+          var js, fjs=d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js=d.createElement(s); 
+          js.id=id; js.async=true; js.src="https://widget.tiledesk.com/v5/launch.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document,'script','tiledesk-jssdk'));
+  </script>
+
 </body>
 </html>
