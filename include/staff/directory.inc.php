@@ -1,13 +1,14 @@
 <?php
 if(!defined('OSTSTAFFINC') || !$thisstaff || !$thisstaff->isStaff()) die('Access Denied');
 $qs = array();
+$agents = $thisstaff->getDeptAgents();
 
-$agents = Staff::objects()
-    ->select_related('dept');
-
-// Sanitize 'order' param To Escape XSS
+// htmlchar 'order' param To Escape XSS
 if ($_REQUEST['order'])
-    $_REQUEST['order'] = Format::sanitize($_REQUEST['order']);
+    $_REQUEST['order'] = Format::htmlchars($_REQUEST['order']);
+// htmlchar 'sort' param To Escape XSS
+if ($_REQUEST['sort'])
+    $_REQUEST['sort'] = Format::htmlchars($_REQUEST['sort']);
 
 if($_REQUEST['q']) {
     $searchTerm=$_REQUEST['q'];
@@ -86,7 +87,7 @@ $qstr.='&amp;order='.($order=='DESC' ? 'ASC' : 'DESC');
         <select name="did" id="did">
              <option value="0">&mdash; <?php echo __('All Departments');?> &mdash;</option>
              <?php
-                foreach (Dept::getDepartments(array('nonempty'=>1)) as $id=>$name) {
+                foreach ($thisstaff->getDepartmentNames() as $id=>$name) {
                     $sel=($_REQUEST['did'] && $_REQUEST['did']==$id)?'selected="selected"':'';
                     echo sprintf('<option value="%d" %s>%s</option>',$id,$sel,$name);
                 }
@@ -112,7 +113,7 @@ $qstr.='&amp;order='.($order=='DESC' ? 'ASC' : 'DESC');
     else
         $showing=__('No agents found!');
     ?>
- <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="0"  >
+<table class="list" border="0" cellspacing="1" cellpadding="0" width="940">
     <thead>
         <tr>
             <th width="20%"><a <?php echo $name_sort; ?> href="directory.php?<?php echo $qstr; ?>&sort=name"><?php echo __('Name');?></a></th>

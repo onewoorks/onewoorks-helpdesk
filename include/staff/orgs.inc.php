@@ -117,7 +117,7 @@ else
  <input type="hidden" name="a" value="mass_process" >
  <input type="hidden" id="action" name="do" value="" >
  <input type="hidden" id="selected-count" name="count" value="" >
-  <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="0"  >
+ <table class="list" border="0" cellspacing="1" cellpadding="0" width="940">
     <thead>
         <tr>
             <th nowrap width="4%">&nbsp;</th>
@@ -169,7 +169,9 @@ else
 </table>
 <?php
 if ($total): //Show options..
-    echo sprintf('<div>&nbsp;%s: %s &nbsp; <a class="no-pjax"
+    echo '<div>';
+    echo '<span class="faded pull-right">'.$showing.'</span>';
+    echo sprintf('&nbsp;%s: %s &nbsp; <a class="no-pjax"
             href="orgs.php?a=export">%s</a></div>',
             __('Page'),
             $pageNav->getPageLinks(),

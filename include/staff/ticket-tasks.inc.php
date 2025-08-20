@@ -22,8 +22,8 @@ $showing = $pageNav->showing().' '._N('task', 'tasks', $count);
     if ($count) {
         echo '<strong>'.$showing.'</strong>';
     } else {
-        echo sprintf(__('%s does not have any tasks'), $ticket? 'This ticket' :
-                'System');
+        echo sprintf(__('%s does not have any tasks'), $ticket? __('This ticket') :
+                __('System'));
     }
    ?>
 </div>
@@ -62,7 +62,7 @@ if ($count) { ?>
 <?php csrf_token(); ?>
  <input type="hidden" name="a" value="mass_process" >
  <input type="hidden" name="do" id="action" value="" >
-  <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="2"  >
+ <table class="list" border="0" cellspacing="1" cellpadding="2" width="940">
     <thead>
         <tr>
             <?php
@@ -92,7 +92,7 @@ if ($count) { ?>
                     Format::truncate($task->getAssigned(),40));
         }
 
-        $status = $task->isOpen() ? '<strong>open</strong>': 'closed';
+        $status = $task->isOpen() ? '<strong>'.__('Open').'</strong>': __('Closed');
 
         $title = Format::htmlchars(Format::truncate($task->getTitle(),40));
         $threadcount = $task->getThread() ?

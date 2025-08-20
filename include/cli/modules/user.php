@@ -53,9 +53,6 @@ class UserManager extends Module {
 
         switch ($args['action']) {
         case 'import':
-            // Properly detect Macintosh style line endings
-            ini_set('auto_detect_line_endings', true);
-
             if (!$options['file'] || $options['file'] == '-')
                 $options['file'] = 'php://stdin';
             if (!($this->stream = fopen($options['file'], 'rb')))
@@ -79,10 +76,10 @@ class UserManager extends Module {
             if (!($this->stream = fopen($stream, 'c')))
                 $this->fail("Unable to open output file [{$options['file']}]");
 
-            fputcsv($this->stream, array('Name', 'Email'));
+            fputcsv($this->stream, array('Name', 'Email'), ",", "\"", "");
             foreach (User::objects() as $user)
                 fputcsv($this->stream,
-                        array((string) $user->getName(), $user->getEmail()));
+                        array((string) $user->getName(), $user->getEmail()), ",", "\"", "");
             break;
 
         case 'activate':
@@ -171,7 +168,8 @@ class UserManager extends Module {
         default:
             $this->stderr->write('Unknown action!');
         }
-        @fclose($this->stream);
+        if (is_resource($this->stream))
+            @fclose($this->stream);
     }
 
     function getQuerySet($options, $requireOne=false) {

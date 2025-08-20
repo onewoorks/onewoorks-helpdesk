@@ -6,7 +6,7 @@ $signin_url = ROOT_PATH . "login.php"
 $signout_url = ROOT_PATH . "logout.php?auth=".$ost->getLinkToken();
 
 header("Content-Type: text/html; charset=UTF-8");
-header("Content-Security-Policy: frame-ancestors ".$cfg->getAllowIframes().";");
+header("Content-Security-Policy: frame-ancestors ".$cfg->getAllowIframes()."; script-src 'self' 'unsafe-inline'; object-src 'none'");
 
 if (($lang = Internationalization::getCurrentLanguage())) {
     $langs = array_unique(array($lang, $cfg->getPrimaryLanguage()));
@@ -33,35 +33,40 @@ if (osTicket::is_ie())
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?php echo Format::htmlchars($title); ?></title>
     <meta name="description" content="customer support platform">
-    <meta name="keywords" content="Onewoorks Solutions, Customer support system, support ticket system">
+    <meta name="keywords" content="osTicket, Customer support system, support ticket system">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/osticket.css?7398e90" media="screen"/>
-    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/theme.css?7398e90" media="screen"/>
-    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/print.css?7398e90" media="print"/>
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>scp/css/typeahead.css?7398e90"media="screen" />
-    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.10.3.custom.min.css?7398e90" rel="stylesheet" media="screen" />
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/jquery-ui-timepicker-addon.css?7398e90" media="all"/>
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/thread.css?7398e90" media="screen"/>
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css?7398e90" media="screen"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css?7398e90"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/flags.css?7398e90"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/rtl.css?7398e90"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/select2.min.css?7398e90"/>
-    
+	<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/osticket.css?53339df" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/theme.css?53339df" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/print.css?53339df" media="print"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/typeahead.css?53339df"
+         media="screen" />
+    <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.2.custom.min.css?53339df"
+        rel="stylesheet" media="screen" />
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/jquery-ui-timepicker-addon.css?53339df" media="all"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/thread.css?53339df" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css?53339df" media="screen"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css?53339df"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/flags.css?53339df"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/rtl.css?53339df"/>
+    <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/select2.min.css?53339df"/>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-16x16.png" sizes="16x16" />
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-3.5.1.min.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-1.12.1.custom.min.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-timepicker-addon.js?7398e90"></script>
-    <script src="<?php echo ROOT_PATH; ?>js/osticket.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/filedrop.field.js?7398e90"></script>
-    <script src="<?php echo ROOT_PATH; ?>scp/js/bootstrap-typeahead.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor.min.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-plugins.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-osticket.js?7398e90"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/select2.min.js?7398e90"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-3.7.0.min.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-1.13.2.custom.min.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-ui-timepicker-addon.js?53339df"></script>
+    <script src="<?php echo ROOT_PATH; ?>js/osticket.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/filedrop.field.js?53339df"></script>
+    <script src="<?php echo ROOT_PATH; ?>js/bootstrap-typeahead.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor.min.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-plugins.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/redactor-osticket.js?53339df"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/select2.min.js?53339df"></script>
+    
+    <script src="<?php echo ROOT_PATH; ?>js/bs5.3.js?v=1.00" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <?php
     if($ost && ($headers=$ost->getExtraHeaders())) {
         echo "\n\t".implode("\n\t", $headers)."\n";
@@ -88,7 +93,7 @@ if (osTicket::is_ie())
     ?>
 </head>
 <body>
-    <div id="container" class="container">
+    <div class="container-fluid main-header">
         <?php
         if($ost->getError())
             echo sprintf('<div class="error_bar">%s</div>', $ost->getError());
@@ -97,30 +102,12 @@ if (osTicket::is_ie())
         elseif($ost->getNotice())
             echo sprintf('<div class="notice_bar">%s</div>', $ost->getNotice());
         ?>
+        <div class=''>
+            
         <div id="header">
             <div class="pull-right flush-right">
             <p>
-             <?php
-                if ($thisclient && is_object($thisclient) && $thisclient->isValid()
-                    && !$thisclient->isGuest()) {
-                 echo Format::htmlchars($thisclient->getName()).'&nbsp;|';
-                 ?>
-                <a href="<?php echo ROOT_PATH; ?>profile.php"><?php echo __('Profile'); ?></a> |
-                <a href="<?php echo ROOT_PATH; ?>tickets.php"><?php echo sprintf(__('Tickets <b>(%d)</b>'), $thisclient->getNumTickets()); ?></a> -
-                <a href="<?php echo $signout_url; ?>"><?php echo __('Sign Out'); ?></a>
-            <?php
-            } elseif($nav) {
-                if ($cfg->getClientRegistrationMode() == 'public') { ?>
-                    <?php echo __('Guest User'); ?> | <?php
-                }
-                if ($thisclient && $thisclient->isValid() && $thisclient->isGuest()) { ?>
-                    <a href="<?php echo $signout_url; ?>"><?php echo __('Sign Out'); ?></a><?php
-                }
-                elseif ($cfg->getClientRegistrationMode() != 'disabled') { ?>
-                    <a href="<?php echo $signin_url; ?>"><?php echo __('Sign In'); ?></a>
-<?php
-                }
-            } ?>
+             
             </p>
             <p>
 <?php
@@ -148,22 +135,51 @@ if (($all_langs = Internationalization::getConfiguredSystemLanguages())
             </a>
         </div>
         <div class="clear"></div>
-        <?php
-        if($nav){ ?>
-        <ul id="nav" class="flush-left">
-            <?php
-            if($nav && ($navs=$nav->getNavLinks()) && is_array($navs)){
-                foreach($navs as $name =>$nav) {
-                    echo sprintf('<li><a class="%s %s" href="%s">%s</a></li>%s',$nav['active']?'active':'',$name,(ROOT_PATH.$nav['href']),$nav['desc'],"\n");
-                }
-            } ?>
-        </ul>
-        <?php
-        }else{ ?>
-         <hr>
-        <?php
-        } ?>
-        <div id="content">
+        
+        <?php if($nav): ?>
+        
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <?php if($nav && ($navs=$nav->getNavLinks()) && is_array($navs)): ?>
+                                <?php foreach($navs as $name =>$nav) : ?>
+                                        <?= sprintf('<li class="nav-item"><a class="nav-link %s %s" href="%s">%s</a></li>%s',$nav['active']?'active':'',$name,(ROOT_PATH.$nav['href']),$nav['desc'],"\n");?>
+                                <?php endforeach;?>
+                            <?php endif; ?>
+                          </ul>
+                        <span class="navbar-text">
+                            <?php if ($thisclient && is_object($thisclient) && $thisclient->isValid() && !$thisclient->isGuest()) {
+                                echo Format::htmlchars($thisclient->getName()).'&nbsp;|';
+                            ?>
+                                <a href="<?php echo ROOT_PATH; ?>profile.php"><?php echo __('Profile'); ?></a> |
+                                <a href="<?php echo ROOT_PATH; ?>tickets.php"><?php echo sprintf(__('Tickets <b>(%d)</b>'), $thisclient->getNumTickets()); ?></a> -
+                                <a href="<?php echo $signout_url; ?>"><?php echo __('Sign Out'); ?></a>
+                            <?php } elseif($nav) {
+                                    if ($cfg->getClientRegistrationMode() == 'public') { ?>
+                                        <?php echo __('Guest User'); ?> | <?php
+                                    }
+                                    if ($thisclient && $thisclient->isValid() && $thisclient->isGuest()) { ?>
+                                        <a href="<?php echo $signout_url; ?>"><?php echo __('Sign Out'); ?></a><?php
+                                    }
+                                    elseif ($cfg->getClientRegistrationMode() != 'disabled') { ?>
+                                        <a href="<?php echo $signin_url; ?>"><?php echo __('Sign In'); ?></a>
+                            <?php }} ?>
+                    </span>
+                    </div>
+                </div>
+            </nav>
+        <?php else: ?>
+            <hr>
+        <?php endif; ?>
+        
+        </div>
+    </div>
+    <div class='container'>
+        <div id="content" class='container'>
 
          <?php if($errors['err']) { ?>
             <div id="msg_error"><?php echo $errors['err']; ?></div>

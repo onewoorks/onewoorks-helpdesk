@@ -23,7 +23,7 @@ $pages = Page::getPages();
 </ul>
 
 <div class="tab_content" id="basic-information">
-<table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <tbody>
     <?php
         $form = $ost->company->getForm();
@@ -34,7 +34,7 @@ $pages = Page::getPages();
 </table>
 </div>
 <div class="hidden tab_content" id="site-pages">
-<table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -59,7 +59,7 @@ $pages = Page::getPages();
                                 ($config['landing_page_id']==$page->getId())?'selected="selected"':'',
                                 $page->getName());
                     } ?>
-                </select>&nbsp;<font class="error">*&nbsp;<?php echo $errors['landing_page_id']; ?></font>
+                </select>&nbsp;<font class="error"><?php echo $errors['landing_page_id']; ?></font>
                 <i class="help-tip icon-question-sign" href="#landing_page"></i>
                 </span>
             </td>
@@ -79,7 +79,7 @@ $pages = Page::getPages();
                                 ($config['offline_page_id']==$page->getId())?'selected="selected"':'',
                                 $page->getName());
                     } ?>
-                </select>&nbsp;<font class="error">*&nbsp;<?php echo $errors['offline_page_id']; ?></font>
+                </select>&nbsp;<font class="error"><?php echo $errors['offline_page_id']; ?></font>
                 <i class="help-tip icon-question-sign" href="#offline_page"></i>
                 </span>
             </td>
@@ -100,7 +100,7 @@ $pages = Page::getPages();
                                 ($config['thank-you_page_id']==$page->getId())?'selected="selected"':'',
                                 $page->getName());
                     } ?>
-                </select>&nbsp;<font class="error">*&nbsp;<?php echo $errors['thank-you_page_id']; ?></font>
+                </select>&nbsp;<font class="error"><?php echo $errors['thank-you_page_id']; ?></font>
                 <i class="help-tip icon-question-sign" href="#default_thank_you_page"></i>
                 </span>
             </td>
@@ -109,7 +109,7 @@ $pages = Page::getPages();
 </table>
 </div>
 <div class="hidden tab_content" id="logos">
-<table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -197,8 +197,8 @@ $pages = Page::getPages();
                     </tbody>
                 </table>
                 <b><?php echo __('Upload a new logo'); ?>:</b>
-                <input type="file" name="logo[]" size="30" value="" />
-                <font class="error"><br/><?php echo $errors['logo']; ?></font>
+                <input type="file" name="logo[]" size="30" value="" /><br/>
+                <font class="error"><?php echo $errors['logo']; ?></font>
             </td>
         </tr>
     </tbody>
@@ -206,7 +206,7 @@ $pages = Page::getPages();
 </div>
 
 <div class="hidden tab_content" id="backdrops">
-<table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -276,8 +276,9 @@ $pages = Page::getPages();
                     </tbody>
                 </table>
                 <b><?php echo __('Upload a new backdrop'); ?>:</b>
-                <input type="file" name="backdrop[]" size="30" value="" />
-                <font class="error"><br/><?php echo $errors['backdrop']; ?></font>
+                <input type="file" name="backdrop[]" size="30" value=""
+                /><br/>
+                <font class="error"><?php echo $errors['backdrop']; ?></font>
             </td>
         </tr>
     </tbody>

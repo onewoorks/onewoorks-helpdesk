@@ -51,9 +51,6 @@ class AgentManager extends Module {
 
         switch ($args['action']) {
         case 'import':
-            // Properly detect Macintosh style line endings
-            ini_set('auto_detect_line_endings', true);
-
             if (!$options['file'] || $options['file'] == '-')
                 $options['file'] = 'php://stdin';
             if (!($this->stream = fopen($options['file'], 'rb')))
@@ -94,14 +91,14 @@ class AgentManager extends Module {
             if (!($this->stream = fopen($stream, 'c')))
                 $this->fail("Unable to open output file [{$options['file']}]");
 
-            fputcsv($this->stream, array('First Name', 'Last Name', 'Email', 'UserName'));
+            fputcsv($this->stream, array('First Name', 'Last Name', 'Email', 'UserName'), ",", "\"", "");
             foreach ($this->getAgents($options) as $agent)
                 fputcsv($this->stream, array(
                     $agent->getFirstName(),
                     $agent->getLastName(),
                     $agent->getEmail(),
                     $agent->getUserName(),
-                ));
+                ), ",", "\"", "");
             break;
 
         case 'list':

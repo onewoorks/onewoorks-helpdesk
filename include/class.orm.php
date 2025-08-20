@@ -197,15 +197,15 @@ class ModelMeta implements ArrayAccess {
                     = is_array($foreign) ? $foreign : explode('.', $foreign);
             }
         }
-        if ($j['list'] && !isset($j['broker'])) {
+        if (isset($j['list']) && !isset($j['broker'])) {
             $j['broker'] = 'InstrumentedList';
         }
-        if ($j['broker'] && !class_exists($j['broker'])) {
+        if (isset($j['broker']) && !class_exists($j['broker'])) {
             throw new OrmException($j['broker'] . ': List broker does not exist');
         }
         foreach ($constraint as $local => $foreign) {
             list($class, $field) = $foreign;
-            if ($local[0] == "'" || $field[0] == "'" || !class_exists($class))
+            if ((isset($local[0]) && $local[0] == "'") || $field[0] == "'" || !class_exists($class))
                 continue;
             $j['fkey'] = $foreign;
             $j['local'] = $local;
@@ -233,16 +233,16 @@ class ModelMeta implements ArrayAccess {
         return $root;
     }
 
-    function offsetGet($field) {
+    function offsetGet($field): mixed {
         return $this->meta[$field];
     }
-    function offsetSet($field, $what) {
+    function offsetSet($field, $what): void {
         $this->meta[$field] = $what;
     }
-    function offsetExists($field) {
+    function offsetExists($field): bool {
         return isset($this->meta[$field]);
     }
-    function offsetUnset($field) {
+    function offsetUnset($field): void {
         throw new Exception('Model MetaData is immutable');
     }
 
@@ -252,7 +252,7 @@ class ModelMeta implements ArrayAccess {
      */
     function getFieldNames() {
         if (!isset($this->fields))
-            $this->fields = self::inspectFields();
+            $this->fields = $this->inspectFields();
         return $this->fields;
     }
 
@@ -351,7 +351,7 @@ class VerySimpleModel {
                 foreach ($j['constraint'] as $local=>$foreign) {
                     list($_klas,$F) = $foreign;
                     $fkey[$F ?: $_klas] = ($local[0] == "'")
-                        ? trim($local, "'") : $this->ht[$local];
+                        ? trim($local, "'") : $this->ht[$local] ?? null;
                 }
                 $v = $this->ht[$field] = new $j['broker'](
                     // Send Model, [Foriegn-Field => Local-Id]
@@ -444,7 +444,7 @@ class VerySimpleModel {
         $joins = static::getMeta('joins');
         if (isset($joins[$field])) {
             $j = $joins[$field];
-            if ($j['list'] && ($value instanceof InstrumentedList)) {
+            if (isset($j['list']) && ($value instanceof InstrumentedList)) {
                 // Magic list property
                 $this->ht[$field] = $value;
                 return;
@@ -773,6 +773,7 @@ class AnnotatedModel {
         if ($extras instanceof VerySimpleModel) {
             $extra = "Writeable";
         }
+        $extra = $extra ?? null;
         if (!isset($classes[$class])) {
             $classes[$class] = eval(<<<END_CLASS
 class {$extra}AnnotatedModel___{$class}
@@ -1244,7 +1245,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
     }
     function getSortFields() {
         $ordering = $this->ordering;
-        if ($this->extra['order_by'])
+        if (isset($this->extra['order_by']))
             $ordering = array_merge($ordering, $this->extra['order_by']);
         return $ordering;
     }
@@ -1265,7 +1266,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
     }
 
     function isWindowed() {
-        return $this->limit || $this->offset || (count($this->values) + count($this->annotations) + @count($this->extra['select'])) > 1;
+        return $this->limit || $this->offset || (count($this->values) + count($this->annotations) + @count($this->extra['select'] ?? array())) > 1;
     }
 
     /**
@@ -1367,7 +1368,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
         return $list[0];
     }
 
-    function count() {
+    function count(): int {
         // Defer to the iterator if fetching already started
         if (isset($this->_iterator)) {
             return $this->_iterator->count();
@@ -1561,7 +1562,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
     }
 
     // IteratorAggregate interface
-    function getIterator($iterator=false) {
+    function getIterator($iterator=false): Traversable {
         if (!isset($this->_iterator)) {
             $class = $iterator ?: $this->getIteratorClass();
             $it = new $class($this);
@@ -1592,16 +1593,16 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
     }
 
     // ArrayAccess interface
-    function offsetExists($offset) {
+    function offsetExists($offset): bool {
         return $this->getIterator()->offsetExists($offset);
     }
-    function offsetGet($offset) {
+    function offsetGet($offset): mixed {
         return $this->getIterator()->offsetGet($offset);
     }
-    function offsetUnset($a) {
+    function offsetUnset($a): void {
         throw new Exception(__('QuerySet is read-only'));
     }
-    function offsetSet($a, $b) {
+    function offsetSet($a, $b): void {
         throw new Exception(__('QuerySet is read-only'));
     }
 
@@ -1618,7 +1619,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
         $meta = $model::getMeta();
         $query = clone $this;
         $options += $this->options;
-        if ($options['nosort'])
+        if (isset($options['nosort']))
             $query->ordering = array();
         elseif (!$query->ordering && $meta['ordering'])
             $query->ordering = $meta['ordering'];
@@ -1627,7 +1628,7 @@ class QuerySet implements IteratorAggregate, ArrayAccess, Serializable, Countabl
         if (!$query->defer && $meta['defer'])
             $query->defer = $meta['defer'];
 
-        $class = $options['compiler'] ?: $this->compiler;
+        $class = $options['compiler'] ?? $this->compiler;
         $compiler = new $class($options);
         $this->query = $compiler->compileSelect($query);
 
@@ -1666,7 +1667,17 @@ EOF;
         return $classname;
     }
 
+    // Fix PHP 8.1.x Deprecation Warnings
+    // Serializable interface will be removed in PHP 9.x
     function serialize() {
+        return serialize($this->__serialize());
+    }
+
+    function unserialize($data) {
+        $this->__unserialize(unserialize($data));
+    }
+
+    function __serialize() {
         $info = get_object_vars($this);
         unset($info['query']);
         unset($info['limit']);
@@ -1674,11 +1685,10 @@ EOF;
         unset($info['_iterator']);
         unset($info['count']);
         unset($info['total']);
-        return serialize($info);
+        return $info;
     }
 
-    function unserialize($data) {
-        $data = unserialize($data);
+    function __unserialize($data) {
         foreach ($data as $name => $val) {
             $this->{$name} = $val;
         }
@@ -1725,27 +1735,27 @@ implements ArrayAccess {
         $this->inner->rewind();
     }
 
-    function getIterator() {
+    function getIterator(): Traversable {
         $this->asArray();
         return new ArrayIterator($this->storage);
     }
 
-    function offsetExists($offset) {
+    function offsetExists($offset): bool {
         $this->fillTo($offset+1);
         return count($this->storage) > $offset;
     }
-    function offsetGet($offset) {
+    function offsetGet($offset): mixed {
         $this->fillTo($offset+1);
         return $this->storage[$offset];
     }
-    function offsetUnset($a) {
+    function offsetUnset($a): void {
         throw new Exception(__('QuerySet is read-only'));
     }
-    function offsetSet($a, $b) {
+    function offsetSet($a, $b): void {
         throw new Exception(__('QuerySet is read-only'));
     }
 
-    function count($mode=COUNT_NORMAL) {
+    function count($mode=COUNT_NORMAL): int {
         $this->asArray();
         return count($this->storage);
     }
@@ -1989,9 +1999,10 @@ implements IteratorAggregate {
         return $model;
     }
 
-    function getIterator() {
+    function getIterator(): Traversable {
         $func = ($this->map) ? 'getRow' : 'getArray';
         $func = array($this->resource, $func);
+        $cache = true;
 
         return new CallbackSimpleIterator(function() use ($func, $cache) {
             global $StopIteration;
@@ -2017,27 +2028,27 @@ implements Iterator {
         $this->callback = $callback;
     }
 
-    function rewind() {
+    function rewind(): void {
         $this->eoi = false;
         $this->next();
     }
 
-    function key() {
+    function key(): mixed {
         return $this->key;
     }
 
-    function valid() {
+    function valid(): bool {
         if (!isset($this->eoi))
             $this->rewind();
         return !$this->eoi;
     }
 
-    function current() {
+    function current(): mixed {
         if ($this->eoi) return false;
         return $this->current;
     }
 
-    function next() {
+    function next(): void {
         try {
             $cbk = $this->callback;
             $this->current = $cbk();
@@ -2062,7 +2073,7 @@ implements IteratorAggregate {
         $this->queryset = $queryset;
     }
 
-    function getIterator() {
+    function getIterator(): Traversable {
         $this->resource = $this->queryset->getQuery();
         return new CallbackSimpleIterator(function() {
             global $StopIteration;
@@ -2085,7 +2096,7 @@ implements IteratorAggregate {
         $this->queryset = $queryset;
     }
 
-    function getIterator() {
+    function getIterator(): Traversable {
         $this->resource = $this->queryset->getQuery();
         return new CallbackSimpleIterator(function() {
             global $StopIteration;
@@ -2160,7 +2171,7 @@ extends ModelResultSet {
      * Slight edit to the standard iteration method which will skip deleted
      * items.
      */
-    function getIterator() {
+    function getIterator(): Traversable {
         return new CallbackFilterIterator(parent::getIterator(),
             function($i) { return !$i->__deleted__; }
         );
@@ -2233,11 +2244,11 @@ extends ModelResultSet {
         return clone $this->queryset;
     }
 
-    function offsetUnset($a) {
+    function offsetUnset($a): void {
         $this->fillTo($a);
         $this->storage[$a]->delete();
     }
-    function offsetSet($a, $b) {
+    function offsetSet($a, $b): void {
         $this->fillTo($a);
         if ($obj = $this->storage[$a])
             $obj->delete();
@@ -2293,7 +2304,7 @@ class SqlCompiler {
                 $field = array_pop($path);
             }
         }
-        return array($field, $path, $operator ?: 'exact');
+        return array($field, $path, $operator ?? 'exact');
     }
 
     /**
@@ -2454,7 +2465,7 @@ class SqlCompiler {
         foreach ($joins as $i=>$A) {
             // Add the conststraint as the last arg to the last join
             if ($i == $last)
-                $constraint = $options['constraint'];
+                $constraint = $options['constraint'] ?? null;
             $alias = $this->pushJoin($A[0], $A[1], $A[2], $A[3], $constraint);
         }
 
@@ -2627,7 +2638,7 @@ class SqlCompiler {
     function getJoins($queryset) {
         $sql = '';
         foreach ($this->joins as $path => $j) {
-            if (!$j['sql'])
+            if (!isset($j['sql']))
                 continue;
             list($base, $constraints) = $j['sql'];
             // Add in path-specific constraints, if any
@@ -2811,8 +2822,8 @@ class MySqlCompiler extends SqlCompiler {
     function __range($a, $b) {
       return sprintf('%s BETWEEN %s AND %s',
         $a,
-        $b[2] ? $b[0] : $this->input($b[0]),
-        $b[2] ? $b[1] : $this->input($b[1]));
+        isset($b[2]) ? $b[0] : $this->input($b[0]),
+        isset($b[2]) ? $b[1] : $this->input($b[1]));
     }
 
     function compileJoin($tip, $model, $alias, $info, $extra=false) {
@@ -2860,7 +2871,7 @@ class MySqlCompiler extends SqlCompiler {
         $table = ($rmeta['view'])
             // XXX: Support parameters from the nested query
             ? $rmodel::getSqlAddParams($this)
-            : $this->quote($rmeta['table']);
+            : $this->quote($rmeta['table'], true);
         $base = "{$join}{$table} {$alias}";
         return array($base, $constraints);
     }
@@ -2907,7 +2918,7 @@ class MySqlCompiler extends SqlCompiler {
         return sprintf("`%s`", str_replace("`", "``", $what));
     }
 
-    function supportsOption($option) {
+    static function supportsOption($option) {
         return true;
     }
 
@@ -2949,7 +2960,12 @@ class MySqlCompiler extends SqlCompiler {
         $q->annotations = false;
         $exec = $q->getQuery(array('nosort' => true));
         $exec->sql = 'SELECT COUNT(*) FROM ('.$exec->sql.') __';
-        $row = $exec->getRow();
+        try {
+            $row = $exec->getRow();
+        } catch (mysqli_sql_exception $e) {
+            throw new InconsistentModelException(
+                'Unable to prepare query: '.db_error().' '.$exec->sql);
+        }
         return is_array($row) ? (int) $row[0] : null;
     }
 
@@ -3102,7 +3118,7 @@ class MySqlCompiler extends SqlCompiler {
                 if ($A instanceof SqlAggregate)
                     $need_group_by = true;
                 $T = $A->toSql($this, $model, $alias);
-                if ($fieldMap) {
+                if (isset($fieldMap)) {
                     array_splice($fields, count($fieldMap[0][0]), 0, array($T));
                     $fieldMap[0][0][] = $alias;
                 }
@@ -3179,7 +3195,7 @@ class MySqlCompiler extends SqlCompiler {
             break;
         }
 
-        return new MysqlExecutor($sql, $this->params, $fieldMap);
+        return new MysqlExecutor($sql, $this->params, $fieldMap ?? array());
     }
 
     function __compileUpdateSet($model, array $pk) {
@@ -3619,12 +3635,22 @@ class Q implements Serializable {
         return $result;
     }
 
+    // Fix PHP 8.1.x Deprecation Warnings
+    // Serializable interface will be removed in PHP 9.x
     function serialize() {
-        return serialize(array($this->negated, $this->ored, $this->constraints));
+        return serialize($this->__serialize());
     }
 
     function unserialize($data) {
-        list($this->negated, $this->ored, $this->constraints) = unserialize($data);
+        $this->__unserialize(unserialize($data));
+    }
+
+    function __serialize() {
+        return array($this->negated, $this->ored, $this->constraints);
+    }
+
+    function __unserialize($data) {
+        list($this->negated, $this->ored, $this->constraints) = $data;
     }
 }
 ?>

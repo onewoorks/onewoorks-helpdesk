@@ -45,7 +45,7 @@ if ($org_id) { ?>
 <em><?php echo __(
 'Use the columns shown in the table below. To add more properties, use the Properties tab.  Only properties with `variable` defined can be imported.'); ?>
 </p>
- <table class="list" width="100%" ><tr>
+<table class="list"><tr>
 <?php
     $fields = array('Value', 'Abbreviation');
     $data = array(

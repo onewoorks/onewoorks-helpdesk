@@ -3,6 +3,7 @@
     <div id="footer">
         <p><?php echo __('Copyright &copy;'); ?> <?php echo date('Y'); ?> <?php
         echo Format::htmlchars((string) $ost->company ?: 'osTicket.com'); ?> - <?php echo __('All rights reserved.'); ?></p>
+        
     </div>
 <div id="overlay"></div>
 <div id="loading">
@@ -21,22 +22,5 @@ if (($lang = Internationalization::getCurrentLanguage()) && $lang != 'en_US') { 
         print $api->client(false);
     ?>);
 </script>
-
-<script type="application/javascript">
-      window.tiledeskSettings= 
-      {
-          projectid: "636dcf724c48ae0014e96f77"
-      };
-      (function(d, s, id) { 
-          var w=window; var d=document; var i=function(){i.c(arguments);};
-          i.q=[]; i.c=function(args){i.q.push(args);}; w.Tiledesk=i;                    
-          var js, fjs=d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js=d.createElement(s); 
-          js.id=id; js.async=true; js.src="https://widget.tiledesk.com/v5/launch.js";
-          fjs.parentNode.insertBefore(js, fjs);
-      }(document,'script','tiledesk-jssdk'));
-  </script>
-
 </body>
 </html>

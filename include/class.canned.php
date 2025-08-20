@@ -229,10 +229,21 @@ extends VerySimpleModel {
     }
 
     static function getCannedResponses($deptId=0, $explicit=false) {
+        global $thisstaff;
+
         $canned = static::objects()
             ->filter(array('isenabled' => true))
             ->order_by('title')
             ->values_flat('canned_id', 'title');
+
+        if ($thisstaff) {
+            $staffDepts = array();
+
+            $staffDepts = $thisstaff->getDepts();
+            $staffDepts[] = 0;
+
+            $canned->filter(array('dept_id__in' => $staffDepts));
+        }
 
         if ($deptId) {
             $depts = array($deptId);
@@ -250,7 +261,7 @@ extends VerySimpleModel {
         return $responses;
     }
 
-    function responsesByDeptId($deptId, $explicit=false) {
+    static function responsesByDeptId($deptId, $explicit=false) {
         return self::getCannedResponses($deptId, $explicit);
     }
 
@@ -299,6 +310,12 @@ extends VerySimpleModel {
                .' '.__('Internal error occurred');
 
         return true;
+    }
+
+    function staffCanAccess($staff) {
+        if (!$staff instanceof Staff)
+            return false;
+        return (!$this->dept || (($role = $staff->getRole($this->dept)) && $role->hasPerm(Canned::PERM_MANAGE)));
     }
 }
 RolePermission::register( /* @trans */ 'Knowledgebase', Canned::getPermissions());

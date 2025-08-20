@@ -43,7 +43,7 @@ $info = $team->getInfo();
 </ul>
 
 <div id="team" class="tab_content">
- <table class="form_table"   border="0" cellspacing="0" cellpadding="2">
+ <table class="form_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -115,7 +115,7 @@ $info = $team->getInfo();
         <tr>
             <td colspan=2>
                 <textarea class="richtext no-bar" name="notes" cols="21"
-                    rows="8" style="width: 80%;"><?php echo Format::htmlchars($team->notes); ?></textarea>
+                    rows="8" style="width: 80%;"><?php echo Format::viewableImages(Format::htmlchars($team->notes, true)); ?></textarea>
             </td>
         </tr>
     </tbody>

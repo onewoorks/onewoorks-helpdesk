@@ -1,0 +1,5 @@
+[20-Aug-2025 02:08:22 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getNavLinks() on array in /home/onewoork/helpdesk.onewoorks.com/include/client/header.inc.php:181
+Stack trace:
+#0 /home/onewoork/helpdesk.onewoorks.com/kb/faq.php(33): require_once()
+#1 {main}
+  thrown in /home/onewoork/helpdesk.onewoorks.com/include/client/header.inc.php on line 181

@@ -31,8 +31,6 @@ class CsvImporter {
     function __construct($stream) {
         // File upload
         if (is_array($stream) && !$stream['error']) {
-            // Properly detect Macintosh style line endings
-            ini_set('auto_detect_line_endings', true);
             $this->stream = fopen($stream['tmp_name'], 'r');
             // Skip Byte Order Mark (BOM) if present
             if (!self::isBOM(fgets($this->stream, 4)))
@@ -65,7 +63,7 @@ class CsvImporter {
                 $named_fields[$f->get('name')] = $f;
 
         // Read the first row and see if it is a header or not
-        if (!($data = fgetcsv($this->stream, 1000, ",")))
+        if (!($data = fgetcsv($this->stream, 1000, ",", "\"", "")))
             throw new ImportError(__('Whoops. Perhaps you meant to send some CSV records'));
 
         $headers = array();
@@ -172,7 +170,7 @@ implements Iterator {
 
     function next() {
         do {
-            if (($csv = fgetcsv($this->stream, 4096, ",")) === false) {
+            if (($csv = fgetcsv($this->stream, 4096, ",", "\"", "")) === false) {
                 // Read error
                 $this->current = false;
                 break;
@@ -191,7 +189,7 @@ implements Iterator {
             foreach ($this->headers as $h => $label) {
                 $f = $this->fields[$h];
                 $f->_errors = array();
-                $T = $f->parse($csv[$i]);
+                $T = $f->parse(trim($csv[$i]));
                 if ($f->validateEntry($T) && $f->errors())
                     throw new ImportDataError(sprintf(__(
                         /* 1 will be a field label, and 2 will be error messages */

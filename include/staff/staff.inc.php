@@ -19,6 +19,8 @@ if ($_REQUEST['a']=='add'){
             Organization::PERM_EDIT,
             Organization::PERM_DELETE,
             FAQ::PERM_MANAGE,
+            Dept::PERM_DEPT,
+            Staff::PERM_STAFF,
         ));
     }
     $title=__('Add New Agent');
@@ -58,7 +60,7 @@ $extras = new ArrayObject();
   </ul>
 
   <div class="tab_content" id="account">
-    <table class="table two-column"   border="0" cellspacing="0" cellpadding="2">
+    <table class="table two-column" width="940" border="0" cellspacing="0" cellpadding="2">
       <tbody>
         <tr><td colspan="2"><div>
         <div class="avatar pull-left" style="width: 100px; margin: 10px;">
@@ -102,7 +104,7 @@ $extras = new ArrayObject();
         <tr>
           <td><?php echo __('Mobile Number');?>:</td>
           <td>
-            <input type="tel" size="18" name="mobile" class="auto phone"
+            <input type="tel" size="18" name="mobile" class="auto mobile"
               value="<?php echo Format::htmlchars($staff->mobile); ?>" />
             <div class="error"><?php echo $errors['mobile']; ?></div>
           </td>
@@ -134,12 +136,7 @@ $extras = new ArrayObject();
           </td>
         </tr>
 <?php
-$bks = array();
-foreach (StaffAuthenticationBackend::allRegistered() as $ab) {
-  if (!$ab->supportsInteractiveAuthentication()) continue;
-  $bks[] = $ab;
-}
-if (count($bks) > 1) {
+if (($bks = StaffAuthenticationBackend::getInteractive())) {
 ?>
         <tr>
           <td><?php echo __('Authentication Backend'); ?>:</td>
@@ -152,13 +149,43 @@ if (count($bks) > 1) {
                     $('#password-fields').show();
                 ">
               <option value="">&mdash; <?php echo __('Use any available backend'); ?> &mdash;</option>
-<?php foreach ($bks as $ab) { ?>
-              <option value="<?php echo $ab::$id; ?>" <?php
-                if ($staff->backend == $ab::$id)
+<?php foreach ($bks as $ab) {
+                $id = $ab->getBkId(); ?>
+              <option value="<?php echo $id; ?>" <?php
+                if ($staff->backend == $id)
                   echo 'selected="selected"'; ?>><?php
                 echo $ab->getName(); ?></option>
 <?php } ?>
             </select>
+          </td>
+        </tr>
+<?php
+} ?>
+<?php
+if ($bks=Staff2FABackend::allRegistered() && $current = $staff->get2FABackend()) {
+    $_config = $staff->getConfig();
+?>
+        <tr>
+          <td><?php echo __('Default 2FA'); ?>:</td>
+          <td>
+              <input type="text" size="40" style="width:300px"
+                name="default_2fa" disabled value="<?php echo $current->getName(); ?>" />
+            &nbsp;
+            <button type="button" id="reset-2fa" class="action-button" onclick="javascript:
+                if (confirm('<?php echo __('You sure?'); ?>')) {
+                    $.ajax({
+                        url: 'ajax.php/staff/'+<?php echo $staff->getId(); ?>+'/reset-2fa',
+                        type: 'POST',
+                        data: {'staffId':<?php echo $staff->getId(); ?>},
+                        success: function(data) {
+                            location.reload();
+                        }
+                    });
+                }
+                return false;">
+              <i class="icon-gear"></i> <?php echo __('Reset 2FA'); ?>
+            </button>
+            <i class="offset help-tip icon-question-sign" href="#reset2fa"></i>
           </td>
         </tr>
 <?php
@@ -213,7 +240,7 @@ if (count($bks) > 1) {
   <!-- ============== DEPARTMENT ACCESS =================== -->
 
   <div class="hidden tab_content" id="access">
-    <table class="table two-column"   border="0" cellspacing="0" cellpadding="2">
+    <table class="table two-column" width="940" border="0" cellspacing="0" cellpadding="2">
       <tbody>
         <tr class="header">
           <th colspan="3">
@@ -231,7 +258,7 @@ if (count($bks) > 1) {
             <select name="dept_id" id="dept_id" data-quick-add="department">
               <option value="0">&mdash; <?php echo __('Select Department');?> &mdash;</option>
               <?php
-              if($depts = Dept::getPublicDepartments()) {
+              if($depts = Dept::getDepartments(array('activeonly' => true, 'publiconly' => true))) {
                 if($staff->dept_id && !array_key_exists($staff->dept_id, $depts))
                 {
                   $depts[$staff->dept_id] = $staff->dept;
@@ -246,6 +273,7 @@ if (count($bks) > 1) {
               <option value="0" data-quick-add>&mdash; <?php echo __('Add New');?> &mdash;</option>
             </select>
             <i class="offset help-tip icon-question-sign" href="#primary_department"></i>
+            <div class="error"><?php echo $errors['dept_id']; ?></div>
             <?php
             if($warn) { ?>
                 &nbsp;<span class="error">*&nbsp;<?php echo $warn; ?></span>
@@ -263,6 +291,7 @@ if (count($bks) > 1) {
               <option value="0" data-quick-add>&mdash; <?php echo __('Add New');?> &mdash;</option>
             </select>
             <i class="offset help-tip icon-question-sign" href="#primary_role"></i>
+            <div class="error"><?php echo $errors['role_id']; ?></div>
           </td>
           <td>
             <label class="inline checkbox">
@@ -274,8 +303,6 @@ if (count($bks) > 1) {
                 <i class="icon-question-sign help-tip"
                     href="#primary_role_on_assign"></i>
             </label>
-
-            <div class="error"><?php echo $errors['role_id']; ?></div>
           </td>
         </tr>
       </tbody>

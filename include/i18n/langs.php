@@ -625,7 +625,7 @@ return array(
     ),
     "sv" => array(
         "name" => "Swedish",
-        "nativeName" => "svenska"
+        "nativeName" => "Svenska"
     ),
     "ta" => array(
         "name" => "Tamil",
@@ -758,6 +758,10 @@ return array(
     "yo" => array(
         "name" => "Yoruba",
         "nativeName" => "Yorùbá"
+    ),
+    "fil" => array(
+        "name" => "Filipino",
+        "nativeName" => "Republika ng Pilipinas"
     ),
     "za" => array(
         "name" => "Zhuang, Chuang",

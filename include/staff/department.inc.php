@@ -43,7 +43,7 @@ $info = Format::htmlchars(($errors && $_POST) ? $_POST : $info, true);
       <i class="icon-user"></i> <?php echo __('Access'); ?></a></li>
 </ul>
 <div id="settings" class="tab_content">
- <table class="form_table"   border="0" cellspacing="0" cellpadding="2">
+ <table class="form_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -95,11 +95,15 @@ $info = Format::htmlchars(($errors && $_POST) ? $_POST : $info, true);
                 <?php echo __('Status');?>:
             </td>
             <td>
+                <?php if ($dept->getId() == $cfg->getDefaultDeptId())
+                    echo $dept->getStatus();
+                else { ?>
                 <select name="status">
                   <option value="active"<?php echo (!strcasecmp($info['status'], 'active'))?'selected="selected"':'';?>><?php echo __('Active'); ?></option>
                   <option value="disabled"<?php echo (!strcasecmp($info['status'], 'disabled'))?'selected="selected"':'';?>><?php echo __('Disabled'); ?></option>
                   <option value="archived"<?php echo (!strcasecmp($info['status'], 'archived'))?'selected="selected"':'';?>><?php echo __('Archived'); ?></option>
                 </select>
+                <?php } ?>
                 &nbsp;<span class="error">&nbsp;</span> <i class="help-tip icon-question-sign" href="#status"></i>
             </td>
         </tr>
@@ -367,7 +371,7 @@ $info = Format::htmlchars(($errors && $_POST) ? $_POST : $info, true);
         <tr>
             <td colspan=2>
                 <textarea class="richtext no-bar" name="signature" cols="21"
-                    rows="5" style="width: 60%;"><?php echo $info['signature']; ?></textarea>
+                    rows="5" style="width: 60%;"><?php echo Format::viewableImages($info['signature']); ?></textarea>
             </td>
         </tr>
     </tbody>

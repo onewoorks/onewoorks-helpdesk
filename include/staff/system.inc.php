@@ -9,9 +9,17 @@ $extensions = array(
             'name' => 'gdlib',
             'desc' => __('Used for image manipulation and PDF printing')
             ),
+        'iconv' => array(
+            'name' => 'iconv',
+            'desc' => __('Useful for email processing')
+            ),
         'imap' => array(
             'name' => 'imap',
-            'desc' => __('Used for email fetching')
+            'desc' => __('Useful for email processing')
+            ),
+        'ctype' => array(
+            'name' => 'ctype',
+            'desc' => __('Required for email fetching')
             ),
         'xml' => array(
             'name' => 'xml',
@@ -57,7 +65,7 @@ $extensions = array(
 
 ?>
 <h2><?php echo __('About this osTicket Installation'); ?></h2>
- <table class="list" width="100%"  width="100%";>
+<table class="list" width="100%";>
 <thead>
     <tr><th colspan="2"><?php echo __('Server Information'); ?></th></tr>
 </thead>
@@ -68,7 +76,7 @@ $extensions = array(
 <?php
 $lv = $ost->getLatestVersion('core', MAJOR_VERSION);
 $tv = THIS_VERSION;
-$gv = GIT_VERSION == '$git' ? substr(@`git rev-parse HEAD`, 0, 7) : false ?: GIT_VERSION;
+$gv = (GIT_VERSION == '$git') ? substr(@`git rev-parse HEAD`, 0, 7) : (false ?: GIT_VERSION);
 if ($lv && $tv[0] == 'v' ? version_compare(THIS_VERSION, $lv, '>=') : $lv == $gv) { ?>
     — <span style="color:green"><i class="icon-check"></i> <?php echo __('Up to date'); ?></span>
 <?php
@@ -194,7 +202,7 @@ if (!$lv) { ?>
             &mdash; <?php echo $manifest['Language']; ?>
         <?php } ?>
 <?php   if ($info['phar'])
-            Plugin::showVerificationBadge($info['path']); ?>
+            PluginManager::showVerificationBadge($info['path']); ?>
         </h3>
         <div><?php echo sprintf('<code>%s</code> — %s', $info['code'],
                 str_replace(ROOT_DIR, '', $info['path'])); ?>

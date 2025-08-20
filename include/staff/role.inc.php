@@ -33,7 +33,7 @@ $info = Format::htmlchars(($errors && $_POST) ? array_merge($info, $_POST) : $in
         <li><a href="#permissions"><i class="icon-lock"></i> <?php echo __('Permissions'); ?></a></li>
     </ul>
     <div id="definition" class="tab_content">
-        <table class="form_table"   border="0" cellspacing="0" cellpadding="2">
+        <table class="form_table" width="940" border="0" cellspacing="0" cellpadding="2">
             <thead>
                 <tr>
                     <th colspan="2">
@@ -64,7 +64,7 @@ $info = Format::htmlchars(($errors && $_POST) ? array_merge($info, $_POST) : $in
                 <tr>
                     <td colspan="7"><textarea name="notes" class="richtext no-bar"
                         rows="6" cols="80"><?php
-                        echo $info['notes']; ?></textarea>
+                        echo Format::viewableImages($info['notes']); ?></textarea>
                     </td>
                 </tr>
             </tbody>

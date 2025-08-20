@@ -62,7 +62,7 @@ $order_by = 'sort';
  <?php csrf_token(); ?>
  <input type="hidden" name="do" value="mass_process" >
 <input type="hidden" id="action" name="a" value="sort" >
-  <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="0"  >
+ <table class="list" border="0" cellspacing="1" cellpadding="0" width="940">
 
     <thead>
 <tr><td colspan="7">

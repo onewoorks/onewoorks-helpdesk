@@ -5,7 +5,7 @@ $category=$faq->getCategory();
 
 ?>
 <div class="row">
-<div class="span8">
+<div class="col-lg-9">
 
 <h1><?php echo __('Frequently Asked Question');?></h1>
 <div id="breadcrumbs" style="padding-top:2px;">
@@ -27,7 +27,7 @@ $category=$faq->getCategory();
 </div>
 </div>
 
-<div class="span4 pull-right">
+<div class="col-lg-3">
 <div class="sidebar">
 <div class="searchbar">
     <form method="get" action="faq.php">

@@ -313,7 +313,7 @@ if ($task->isOverdue())
 </div>
 <?php
 if (!$ticket) { ?>
-    <table class="ticket_info" cellspacing="0" cellpadding="0"   border="0">
+    <table class="ticket_info" cellspacing="0" cellpadding="0" width="940" border="0">
         <tr>
             <td width="50%">
                 <table border="0" cellspacing="" cellpadding="4" width="100%">
@@ -367,6 +367,7 @@ if (!$ticket) { ?>
 
                     <tr>
                         <th><?php echo __('Department');?>:</th>
+                        <?php if ($role->hasPerm(Task::PERM_TRANSFER)) {?>
                         <td>
                             <a class="task-action" data-placement="bottom" data-toggle="tooltip" title="<?php echo __('Transfer'); ?>"
                               data-redirect="tasks.php?id=<?php echo $task->getId(); ?>"
@@ -375,6 +376,9 @@ if (!$ticket) { ?>
                                   saveDraft();"
                               ><?php echo Format::htmlchars($task->dept->getName()); ?>
                         </td>
+                        <?php }else {?>
+                          <td><?php echo Format::htmlchars($task->dept->getName()); ?></td>
+                        <?php } ?>
                     </tr>
                     <?php
                     if ($task->isOpen()) { ?>
@@ -463,7 +467,7 @@ if (!$ticket) { ?>
             continue;
         ?>
         <br>
-        <table class="ticket_info custom-data" cellspacing="0" cellpadding="0"   border="0">
+        <table class="ticket_info custom-data" cellspacing="0" cellpadding="0" width="940" border="0">
         <thead>
             <th colspan="2"><?php echo Format::htmlchars($form->getTitle()); ?></th>
         </thead>

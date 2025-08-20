@@ -350,23 +350,21 @@ class Task extends TaskModel implements RestrictedAccess, Threadable {
     }
 
     function getLastRespondent() {
-
         if (!isset($this->lastrespondent)) {
             $this->lastrespondent = Staff::objects()
                 ->filter(array(
-                'staff_id' => static::objects()
+                'staff_id' => $this->getThread()->entries
                     ->filter(array(
-                        'thread__entries__type' => 'R',
-                        'thread__entries__staff_id__gt' => 0
+                        'type' => 'R',
+                        'staff_id__gt' => 0
                     ))
-                    ->values_flat('thread__entries__staff_id')
-                    ->order_by('-thread__entries__id')
-                    ->limit('1,1')
+                    ->values_flat('staff_id')
+                    ->order_by('-id')
+                    ->limit('1')
                 ))
                 ->first()
                 ?: false;
         }
-
         return $this->lastrespondent;
     }
 
@@ -483,24 +481,18 @@ class Task extends TaskModel implements RestrictedAccess, Threadable {
     }
 
     function getAssignmentForm($source=null, $options=array()) {
+        global $thisstaff;
+
         $prompt = $assignee = '';
         // Possible assignees
-        $assignees = array();
+        $dept = $this->getDept();
         switch (strtolower($options['target'])) {
             case 'agents':
-                $dept = $this->getDept();
-                foreach ($dept->getAssignees() as $member)
-                    $assignees['s'.$member->getId()] = $member;
-
                 if (!$source && $this->isOpen() && $this->staff)
                     $assignee = sprintf('s%d', $this->staff->getId());
                 $prompt = __('Select an Agent');
                 break;
             case 'teams':
-                if (($teams = Team::getActiveTeams()))
-                    foreach ($teams as $id => $name)
-                        $assignees['t'.$id] = $name;
-
                 if (!$source && $this->isOpen() && $this->team)
                     $assignee = sprintf('t%d', $this->team->getId());
                 $prompt = __('Select a Team');
@@ -513,12 +505,15 @@ class Task extends TaskModel implements RestrictedAccess, Threadable {
 
         $form = AssignmentForm::instantiate($source, $options);
 
-        if ($assignees)
-            $form->setAssignees($assignees);
-
-        if ($prompt && ($f=$form->getField('assignee')))
-            $f->configure('prompt', $prompt);
-
+        // Field configurations
+        if ($f=$form->getField('assignee')) {
+            $f->configure('dept', $dept);
+            $f->configure('staff', $thisstaff);
+            if ($prompt)
+                $f->configure('prompt', $prompt);
+            if ($options['target'])
+                $f->configure('target', $options['target']);
+        }
 
         return $form;
     }

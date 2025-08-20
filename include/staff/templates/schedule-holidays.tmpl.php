@@ -1,12 +1,12 @@
 <?php
 //  Holidays schedules
-$holidays = $_POST ? $_POST['holidays'] : ($schedule->getHolidays() ?:
+$holidays = $_POST && isset($_POST['holidays']) ? $_POST['holidays'] : ($schedule->getHolidays() ?:
         array());
 $schedules = HolidaysSchedule::getSchedules();
 //    ->order_by('name')
 ?>
 <div>
-<table class="form_table fixed"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table fixed" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead><tr><th><em><?php
         echo __('Check all Holiday Schedules applicable to this schedule');
         ?></em></th></tr></thead>
@@ -18,7 +18,7 @@ $schedules = HolidaysSchedule::getSchedules();
                 <td>
                     <input type="checkbox" name="holidays[]"
                         value="<?php echo $id; ?>"
-                        <?php echo in_array($id, $holidays) ?
+                        <?php echo in_array($id, $holidays ?: []) ?
                         'checked="checked"' : ''; ?>
                         class="schedule-holiday nowarn"/>
                     &nbsp;

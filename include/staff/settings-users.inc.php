@@ -14,7 +14,7 @@ if(!defined('OSTADMININC') || !$thisstaff || !$thisstaff->isAdmin() || !$config)
 </ul>
 <div id="users-tabs_container">
    <div id="settings" class="tab_content">
-<table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+<table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <tbody>
 
         <tr>
@@ -89,6 +89,26 @@ if(!defined('OSTADMININC') || !$thisstaff || !$thisstaff->isAdmin() || !$config)
             <i class="help-tip icon-question-sign" href="#registration_method"></i>
             </td>
         </tr>
+		<tr>
+			<td><?php echo __('Password Policy'); ?>:</td>
+			<td>
+				<select name="client_passwd_policy">
+				<option value=" "> &mdash; <?php echo __('All Active Policies'); ?> &mdash;</option>
+				<?php
+                foreach (PasswordPolicy::allActivePolicies() as $P) {
+                    $id = $P->getBkId();
+                    echo sprintf('<option value="%s" %s>%s</option>',
+                            $id,
+                            (($config['client_passwd_policy'] == $id) ? 'selected="selected"' : ''),
+                            $P->getName());
+                }
+				?>
+				</select>
+				<font class="error"><?php echo
+				$errors['client_passwd_policy']; ?></font>
+				<i class="help-tip icon-question-sign" href="#client_password_policy"></i>
+			</td>
+		</tr>
         <tr><td><?php echo __('User Excessive Logins'); ?>:</td>
             <td>
                 <select name="client_max_logins">
@@ -136,7 +156,7 @@ if(!defined('OSTADMININC') || !$thisstaff || !$thisstaff->isAdmin() || !$config)
     </table>
    </div>
    <div id="templates" class="tab_content hidden">
-    <table class="form_table settings_table"   border="0" cellspacing="0" cellpadding="2">
+    <table class="form_table settings_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <tbody>
 <?php
 $res = db_query('select distinct(`type`), id, notes, name, updated from '

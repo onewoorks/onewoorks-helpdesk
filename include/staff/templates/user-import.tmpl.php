@@ -47,7 +47,7 @@ if ($org_id) { ?>
     UserForm::getUserForm()->get('title')
 ); ?>
 </p>
- <table class="list" width="100%" ><tr>
+<table class="list"><tr>
 <?php
     $fields = array();
     $data = array(

@@ -5,17 +5,9 @@ $date_header = $date_col = false;
 // Make sure the cdata materialized view is available
 TaskForm::ensureDynamicDataView();
 
-// Figure out REFRESH url — which might not be accurate after posting a
-// response
-list($path,) = explode('?', $_SERVER['REQUEST_URI'], 2);
-$args = array();
-parse_str($_SERVER['QUERY_STRING'], $args);
-
-// Remove commands from query
-unset($args['id']);
-unset($args['a']);
-
-$refresh_url = htmlspecialchars($path) . '?' . http_build_query($args);
+// Remove some variables from query string.
+$qsFilter = ['id', 'a'];
+$refresh_url = Http::refresh_url($qsFilter);
 
 $sort_options = array(
     'updated' =>            __('Most Recently Updated'),
@@ -160,7 +152,7 @@ $tasks->annotate(array(
     ),
 ));
 
-$tasks->values('id', 'number', 'created', 'staff_id', 'team_id',
+$tasks->values('id', 'number', 'created', 'staff_id', 'dept_id', 'team_id',
         'staff__firstname', 'staff__lastname', 'team__name',
         'dept__name', 'cdata__title', 'flags', 'ticket__number', 'ticket__ticket_id');
 // Apply requested quick filter
@@ -247,8 +239,6 @@ $pageNav=new Pagenate($count, $page, PAGE_LIMIT);
 $pageNav->setURL('tasks.php', $args);
 $tasks = $pageNav->paginate($tasks);
 
-TaskForm::ensureDynamicDataView();
-
 // Save the query to the session for exporting
 $_SESSION[':Q:tasks'] = $tasks;
 
@@ -333,7 +323,7 @@ if ($thisstaff->hasPerm(Task::PERM_DELETE, false)) {
  <input type="hidden" name="do" id="action" value="" >
  <input type="hidden" name="status" value="<?php echo
  Format::htmlchars($_REQUEST['status'], true); ?>" >
-  <table class="list" width="100%"  border="0" cellspacing="1" cellpadding="2"  >
+ <table class="list" border="0" cellspacing="1" cellpadding="2" width="940">
     <thead>
         <tr>
             <?php if ($thisstaff->canManageTickets()) { ?>

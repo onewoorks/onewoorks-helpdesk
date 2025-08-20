@@ -29,7 +29,7 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
     — <?php echo $info['name']; ?></small>
      <?php } ?>
 </h2>
- <table class="form_table"   border="0" cellspacing="0" cellpadding="2">
+ <table class="form_table" width="940" border="0" cellspacing="0" cellpadding="2">
     <thead>
         <tr>
             <th colspan="2">
@@ -162,7 +162,7 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
         <tr>
             <td colspan=2>
                 <textarea class="richtext no-bar" name="notes" cols="21"
-                    rows="8" style="width: 80%;"><?php echo $info['notes']; ?></textarea>
+                    rows="8" style="width: 80%;"><?php echo Format::viewableImages($info['notes']); ?></textarea>
             </td>
         </tr>
     </tbody>
