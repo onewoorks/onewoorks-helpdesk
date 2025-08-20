@@ -27,9 +27,11 @@ require(CLIENTINC_DIR.'header.inc.php');
 if ($cfg && $cfg->isKnowledgebaseEnabled()) { ?>
 <div class="search-form">
     <form method="get" action="kb/faq.php">
-    <input type="hidden" name="a" value="search"/>
-    <input type="text" name="q" class="search" placeholder="<?php echo __('Search our knowledge base'); ?>"/>
-    <button type="submit" class="btn btn-success"><?php echo __('Search'); ?></button>
+        <div class="input-group">
+            <input type="hidden" name="a" value="search"/>
+            <input type="text" name="q" class="form-control" placeholder="<?php echo __('Search our knowledge base'); ?>"/>
+            <button type="submit" class="btn btn-success"><?php echo __('Search'); ?></button>
+        </div>
     </form>
 </div>
 <?php } ?>
