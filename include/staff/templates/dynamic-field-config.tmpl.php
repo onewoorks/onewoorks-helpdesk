@@ -10,7 +10,7 @@
 
 <div class="hidden tab_content" id="visibility">
     <div>
-    <div class="span4">
+    <div class="col-lg-3">
         <div style="margin-bottom:5px"><strong><?php echo __('Enabled'); ?></strong>
         <i class="help-tip icon-question-sign"
             data-title="<?php echo __('Enabled'); ?>"
@@ -26,7 +26,7 @@
     </div>
     <hr class="faded"/>
 
-    <div class="span4">
+    <div class="col-lg-3">
         <div style="margin-bottom:5px"><strong><?php echo __('Visible'); ?></strong>
         <i class="help-tip icon-question-sign"
             data-title="<?php echo __('Visible'); ?>"
@@ -51,7 +51,7 @@
 <?php if ($field->getImpl()->hasData()) { ?>
     <hr class="faded"/>
 
-    <div class="span4">
+    <div class="col-lg-3">
         <div style="margin-bottom:5px"><strong><?php echo __('Required'); ?></strong>
         <i class="help-tip icon-question-sign"
             data-title="<?php echo __('Required'); ?>"
@@ -74,7 +74,7 @@
     </div>
     <hr class="faded"/>
 
-    <div class="span4">
+    <div class="col-lg-3">
         <div style="margin-bottom:5px"><strong><?php echo __('Editable'); ?></strong>
         <i class="help-tip icon-question-sign"
             data-content="<?php echo __('Fields marked editable allow agents and endusers to update the content of this field after the form entry has been created.'); ?>"
@@ -98,7 +98,7 @@
 <?php if (in_array($field->get('form')->get('type'), array('G', 'T', 'A'))) { ?>
     <hr class="faded"/>
 
-    <div class="span4">
+    <div class="col-lg-3">
         <div style="margin-bottom:5px"><strong><?php echo __('Data Integrity');
     ?></strong>
         <i class="help-tip icon-question-sign"
@@ -192,7 +192,7 @@
     display: inline-block;
     vertical-align: top;
 }
-.span4 {
+.col-lg-3 {
     width: 30.25%;
     margin: 0 1%;
     display: inline-block;

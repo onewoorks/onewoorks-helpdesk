@@ -464,8 +464,6 @@ body {
   height: auto !important;
   overflow: hidden;
   margin: 0;
-  background: url(../images/kb_category_bg.png) bottom left repeat-x;
-  border-bottom: 1px solid #ddd;
   display: block;
 }
 #kb > li h4 span {
@@ -848,7 +846,6 @@ i.refresh {
   font-size: 11px;
   overflow: hidden;
   background-color: #dddddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100% #dddddd));
   background-image: -webkit-linear-gradient(top, #efefef 0%, #dddddd 100%);
   background-image: -moz-linear-gradient(top, #efefef 0%, #dddddd 100%);
   background-image: -ms-linear-gradient(top, #efefef 0%, #dddddd 100%);
@@ -942,18 +939,7 @@ img.sign-in-image {
 .sidebar section + section {
     margin-top: 15px;
 }
-.search-form {
-    padding-top: 12px;
-}
-.searchbar .search,
-.search-form .search {
-    display: inline-block;
-    width: 400px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-}
+
 
 .searchbar .search {
     width: 100%;
@@ -963,20 +949,6 @@ img.sign-in-image {
 .bleed {
     margin: 0 !important;
     padding: 0 !important;
-}
-.row {
-}
-.span4 {
-    display: inline-block;
-    width: 29.5%;
-    margin: 0 1%;
-    vertical-align: top;
-}
-.span8 {
-    display: inline-block;
-    width: 66.0%;
-    margin: 0 1%;
-    vertical-align: top;
 }
 .truncate {
     display: inline-block;

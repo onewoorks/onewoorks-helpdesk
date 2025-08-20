@@ -35,7 +35,7 @@ if ($info['topicId'] && ($topic=Topic::lookup($info['topicId']))) {
 <p><?php echo __('Please fill in the form below to open a new ticket.');?></p>
 <form id="ticketForm" method="post" action="open.php" enctype="multipart/form-data">
   <?php csrf_token(); ?>
-  <input type="hidden" name="a" value="open">
+  <input type="hidden" name="a" class="form-control" value="open">
   <table width="800" cellpadding="1" cellspacing="0" border="0">
     <tbody>
 <?php
@@ -60,7 +60,7 @@ if ($info['topicId'] && ($topic=Topic::lookup($info['topicId']))) {
     </td></tr>
     <tr>
         <td colspan="2">
-            <select id="topicId" name="topicId" onchange="javascript:
+            <select id="topicId" name="topicId" class="form-control" onchange="javascript:
                     var data = $(':input[name]', '#dynamic-form').serialize();
                     $.ajax(
                       'ajax.php/form/help-topic/' + this.value,
@@ -115,9 +115,10 @@ if ($info['topicId'] && ($topic=Topic::lookup($info['topicId']))) {
   </table>
 <hr/>
   <p class="buttons" style="text-align:center;">
-        <input type="submit" value="<?php echo __('Create Ticket');?>">
-        <input type="reset" name="reset" value="<?php echo __('Reset');?>">
-        <input type="button" name="cancel" value="<?php echo __('Cancel'); ?>" onclick="javascript:
+        <input type="submit" value="<?php echo __('Create Ticket');?>" class="btn btn-primary">
+        <input type="reset" name="reset" value="<?php echo __('Reset');?>" class="btn btn-warning">
+        <input type="button" name="cancel" value="<?php echo __('Cancel'); ?>" class="btn btn-danger"
+            onclick="javascript:
             $('.richtext').each(function() {
                 var redactor = $(this).data('redactor');
                 if (redactor && redactor.opts.draftDelete)

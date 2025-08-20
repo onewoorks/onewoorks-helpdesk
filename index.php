@@ -21,63 +21,87 @@ $section = 'home';
 require(CLIENTINC_DIR.'header.inc.php');
 ?>
 <div id="landing_page">
-<?php include CLIENTINC_DIR.'templates/sidebar.tmpl.php'; ?>
-<div class="main-content">
-<?php
-if ($cfg && $cfg->isKnowledgebaseEnabled()) { ?>
-<div class="search-form">
-    <form method="get" action="kb/faq.php">
-        <div class="input-group">
-            <input type="hidden" name="a" value="search"/>
-            <input type="text" name="q" class="form-control" placeholder="<?php echo __('Search our knowledge base'); ?>"/>
-            <button type="submit" class="btn btn-success"><?php echo __('Search'); ?></button>
+    <div class="row">
+        <div class="col-lg-9">
+            <?php if ($cfg && $cfg->isKnowledgebaseEnabled()): ?>
+                <div class="search-form">
+                    <form method="get" action="kb/faq.php">
+                        <div class="input-group">
+                            <input type="hidden" name="a" value="search"/>
+                            <input type="text" name="q" class="form-control" placeholder="<?php echo __('Search our knowledge base'); ?>"/>
+                            <button type="submit" class="btn btn-success"><?php echo __('Search'); ?></button>
+                        </div>
+                    </form>
+                </div>
+            <?php endif; ?>
+
+            <div class='mt-3'>
+                <?php
+                    if($cfg && ($page = $cfg->getLandingPage()))
+                        echo $page->getBodyWithImages();
+                    else
+                        echo  '<h1>'.__('Welcome to the Support Center').'</h1>';
+                ?>
+            </div>
+
+            <div style='display:none' >
+                <?php if($cfg && $cfg->isKnowledgebaseEnabled()): ?>
+            
+            
+            <?php
+                $cats = Category::getFeatured();
+                ?>
+                <?php if ($cats->all()): ?>
+                    <h1><?= __('Featured Knowledge Base Articles'); ?></h1>
+                <?php endif;?>
+
+                <?php foreach ($cats as $C): ?>
+    
+                    <div class="front-page">
+                        <i class="icon-folder-open icon-2x"></i>
+                        <div class="category-name">
+                            <?php echo $C->getName(); ?>
+                        </div>
+
+                        <div class="row">
+                        <?php foreach ($C->getTopArticles() as $F): ?>
+                                    <div class="col-lg-4">
+                                        <a href="<?php echo ROOT_PATH;?>kb/faq.php?id=<?php echo $F->getId(); ?>">
+                                        <div class="card">
+                                            <div class="card-header"><?php echo $F->getQuestion(); ?></div>
+                                            <div class="card-panel">
+                                                <div class="article-teaser"><?php echo $F->getTeaser(); ?></div>
+                                            </div>
+                                        </div>
+                                        </a>
+                                    </div>
+                        <?php endforeach; ?>
+                        </div>
+                        
+                    </div>
+                
+                <?php endforeach; ?>
+                <?php endif;?>
+            </div>
         </div>
-    </form>
-</div>
-<?php } ?>
+
+        <div class="col-lg-3">
+            <?php include CLIENTINC_DIR.'templates/sidebar.tmpl.php'; ?>
+        </div>
+    </div>
+
+<div class="">
+
 <div class="thread-body">
-<?php
-    if($cfg && ($page = $cfg->getLandingPage()))
-        echo $page->getBodyWithImages();
-    else
-        echo  '<h1>'.__('Welcome to the Support Center').'</h1>';
-    ?>
+
     </div>
 </div>
 <div class="clear"></div>
 
 <div>
-<?php
-if($cfg && $cfg->isKnowledgebaseEnabled()){
-    //FIXME: provide ability to feature or select random FAQs ??
-?>
-<br/><br/>
-<?php
-$cats = Category::getFeatured();
-if ($cats->all()) { ?>
-<h1><?php echo __('Featured Knowledge Base Articles'); ?></h1>
-<?php
-}
 
-    foreach ($cats as $C) { ?>
-    <div class="featured-category front-page">
-        <i class="icon-folder-open icon-2x"></i>
-        <div class="category-name">
-            <?php echo $C->getName(); ?>
-        </div>
-<?php foreach ($C->getTopArticles() as $F) { ?>
-        <div class="article-headline">
-            <div class="article-title"><a href="<?php echo ROOT_PATH;
-                ?>kb/faq.php?id=<?php echo $F->getId(); ?>"><?php
-                echo $F->getQuestion(); ?></a></div>
-            <div class="article-teaser"><?php echo $F->getTeaser(); ?></div>
-        </div>
-<?php } ?>
-    </div>
-<?php
-    }
-}
-?>
+<br/><br/>
+
 </div>
 </div>
 

@@ -4480,6 +4480,7 @@ class TextboxWidget extends Widget {
             <?php echo $autofocus .' '.Format::array_implode('=', ' ',
                     array_filter($attrs)); ?>
             name="<?php echo $this->name; ?>"
+            class="form-control"
             value="<?php echo Format::htmlchars($this->value, true); ?>"/>
         <?php
     }
@@ -4595,14 +4596,20 @@ class PhoneNumberWidget extends Widget {
         $config = $this->field->getConfiguration();
         list($phone, $ext) = explode("X", $this->value);
         ?>
-        <input id="<?php echo $this->id; ?>" type="tel" name="<?php echo $this->name; ?>" value="<?php
-        echo Format::htmlchars($phone); ?>"/><?php
+        <input 
+            id="<?php echo $this->id; ?>" 
+            type="tel" 
+            class="form-control"
+            name="<?php echo $this->name; ?>" 
+            value="<?php echo Format::htmlchars($phone); ?>"/><?php
         // Allow display of extension field even if disabled if the phone
         // number being edited has an extension
         if ($ext || $config['ext']) { ?> <?php echo __('Ext'); ?>:
-            <input type="text" name="<?php
-            echo $this->name; ?>-ext" value="<?php echo Format::htmlchars($ext);
-                ?>" size="5"/>
+            <input type="text" 
+                name="<?php echo $this->name; ?>-ext" 
+                value="<?php echo Format::htmlchars($ext);?>" 
+                class="form-control"
+                size="5"/>
         <?php }
     }
 

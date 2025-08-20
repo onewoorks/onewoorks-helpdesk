@@ -988,13 +988,13 @@ img.sign-in-image {
 }
 .row {
 }
-.span4 {
+.col-lg-3 {
     display: inline-block;
     width: 29.5%;
     margin: 0 1%;
     vertical-align: top;
 }
-.span8 {
+.col-lg-9 {
     display: inline-block;
     width: 66.0%;
     margin: 0 1%;

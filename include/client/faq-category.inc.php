@@ -2,7 +2,7 @@
 if(!defined('OSTCLIENTINC') || !$category || !$category->isPublic()) die('Access Denied');
 ?>
 <div class="row">
-<div class="span8">
+<div class="col-lg-9">
     <h1><?php echo $category->getFullName(); ?></h1>
 <p>
 <?php echo Format::safe_html($category->getLocalDescriptionWithImages()); ?>
@@ -35,7 +35,7 @@ $faqs = FAQ::objects()
 if ($faqs->exists(true)) {
     echo '
          <h2>'.__('Frequently Asked Questions').'</h2>
-         <div id="faq">
+         <div >
             <ol>';
 foreach ($faqs as $F) {
         $attachments=$F->has_attachments?'<span class="Icon file"></span>':'';
@@ -51,12 +51,12 @@ foreach ($faqs as $F) {
 ?>
 </div>
 
-<div class="span4">
+<div class="col-lg-3">
     <div class="sidebar">
     <div class="searchbar">
         <form method="get" action="faq.php">
         <input type="hidden" name="a" value="search"/>
-        <input type="text" name="q" class="search" placeholder="<?php
+        <input type="text" name="q" class="form-control" placeholder="<?php
             echo __('Search our knowledge base'); ?>"/>
         <input type="submit" style="display:none" value="search"/>
         </form>
